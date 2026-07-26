@@ -12,7 +12,7 @@ Apply it to a project:
 devcontainer templates apply \
     --workspace-folder . \
     --template-id ghcr.io/kubamarchwicki/devcontainer-templates/ai-tools:1 \
-    --template-args '{"projectName":"nams-plugins"}'
+    --template-args '{"projectName":"<PROJECT_NAME>"}'
 ```
 
 `projectName` prefixes the persistent Codex and Claude volume names. Omit it to retain automatic `${devcontainerId}`-based project isolation.
