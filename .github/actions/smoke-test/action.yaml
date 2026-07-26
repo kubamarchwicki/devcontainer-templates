@@ -3,16 +3,20 @@ inputs:
   template:
     description: "Template to test"
     required: true
+  template-args:
+    description: "Template arguments provided as a JSON object"
+    required: false
+    default: "{}"
 
 runs:
   using: "composite"
   steps:
-    - name: "Checkout repository"
-      uses: actions/checkout@v4
-
     - name: "Build template"
       shell: bash
-      run: ${{ github.action_path }}/build.sh ${{ inputs.template }}
+      env:
+        TEMPLATE_ID: ${{ inputs.template }}
+        TEMPLATE_ARGS: ${{ inputs.template-args }}
+      run: ${{ github.action_path }}/build.sh "${TEMPLATE_ID}" "${TEMPLATE_ARGS}"
 
     - name: "Test template"
       shell: bash

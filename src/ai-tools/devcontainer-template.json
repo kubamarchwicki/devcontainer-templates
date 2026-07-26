@@ -1,10 +1,17 @@
 {
     "id": "ai-tools",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "name": "Codex and Claude Code",
     "description": "A personal development container with Codex, Claude Code, and optional shared engineering skills.",
     "documentationURL": "https://github.com/kubamarchwicki/devcontainer-templates/tree/main/src/ai-tools",
     "licenseURL": "https://github.com/kubamarchwicki/devcontainer-templates/blob/main/LICENSE",
+    "options": {
+        "projectName": {
+            "type": "string",
+            "description": "Docker-safe project name used to prefix the persistent Codex and Claude volumes.",
+            "default": "${devcontainerId}"
+        }
+    },
     "platforms": [
         "Any"
     ]

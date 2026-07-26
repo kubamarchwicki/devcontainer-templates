@@ -9,7 +9,10 @@ Apply the published Template:
 ```sh
 devcontainer templates apply \
     --workspace-folder . \
-    --template-id ghcr.io/kubamarchwicki/devcontainer-templates/ai-tools:1
+    --template-id ghcr.io/kubamarchwicki/devcontainer-templates/ai-tools:1 \
+    --template-args '{"projectName":"<PROJECT_NAME>"}'
 ```
+
+`projectName` prefixes the persistent Codex and Claude volume names. It must be valid in a Docker volume name. If omitted, the Template uses `${devcontainerId}` to keep the volumes project-scoped.
 
 The Template is copied into the target repository. Existing projects do not automatically inherit later Template releases.

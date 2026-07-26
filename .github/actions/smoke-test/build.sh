@@ -1,9 +1,19 @@
 #!/bin/bash
 TEMPLATE_ID="$1"
+TEMPLATE_ARGS="${2:-}"
 
 set -e
 
 shopt -s dotglob
+
+if [ -z "${TEMPLATE_ARGS}" ]; then
+    TEMPLATE_ARGS="{}"
+fi
+
+if ! jq -e 'type == "object" and all(to_entries[]; (.value | type) == "string")' <<<"${TEMPLATE_ARGS}" >/dev/null; then
+    echo "Template arguments must be a JSON object with string values"
+    exit 1
+fi
 
 SRC_DIR="/tmp/${TEMPLATE_ID}"
 cp -R "src/${TEMPLATE_ID}" "${SRC_DIR}"
@@ -21,7 +31,11 @@ if [ "${OPTION_PROPERTY}" != "" ] && [ "${OPTION_PROPERTY}" != "null" ] ; then
         for OPTION in "${OPTIONS[@]}"
         do
             OPTION_KEY="\${templateOption:$OPTION}"
-            OPTION_VALUE=$(jq -r ".options | .${OPTION} | .default" devcontainer-template.json)
+            if jq -e --arg option "${OPTION}" 'has($option)' <<<"${TEMPLATE_ARGS}" >/dev/null; then
+                OPTION_VALUE=$(jq -r --arg option "${OPTION}" '.[$option]' <<<"${TEMPLATE_ARGS}")
+            else
+                OPTION_VALUE=$(jq -r --arg option "${OPTION}" '.options[$option].default' devcontainer-template.json)
+            fi
 
             if [ "${OPTION_VALUE}" = "" ] || [ "${OPTION_VALUE}" = "null" ] ; then
                 echo "Template '${TEMPLATE_ID}' is missing a default value for option '${OPTION}'"
@@ -30,7 +44,8 @@ if [ "${OPTION_PROPERTY}" != "" ] && [ "${OPTION_PROPERTY}" != "null" ] ; then
 
             echo "(!) Replacing '${OPTION_KEY}' with '${OPTION_VALUE}'"
             OPTION_VALUE_ESCAPED=$(sed -e 's/[]\/$*.^[]/\\&/g' <<<"${OPTION_VALUE}")
-            find ./ -type f -print0 | xargs -0 sed -i "s/${OPTION_KEY}/${OPTION_VALUE_ESCAPED}/g"
+            find ./ -type f -print0 | xargs -0 sed -i.template-option-backup "s/${OPTION_KEY}/${OPTION_VALUE_ESCAPED}/g"
+            find ./ -type f -name '*.template-option-backup' -delete
         done
     fi
 fi

@@ -11,15 +11,18 @@ Apply it to a project:
 ```sh
 devcontainer templates apply \
     --workspace-folder . \
-    --template-id ghcr.io/kubamarchwicki/devcontainer-templates/ai-tools:1
+    --template-id ghcr.io/kubamarchwicki/devcontainer-templates/ai-tools:1 \
+    --template-args '{"projectName":"nams-plugins"}'
 ```
+
+`projectName` prefixes the persistent Codex and Claude volume names. Omit it to retain automatic `${devcontainerId}`-based project isolation.
 
 Then build or open the generated `.devcontainer` configuration.
 
 ## Local testing
 
 ```sh
-./.github/actions/smoke-test/build.sh ai-tools
+./.github/actions/smoke-test/build.sh ai-tools '{"projectName":"ai-tools-smoke"}'
 ./.github/actions/smoke-test/test.sh ai-tools
 ```
 
