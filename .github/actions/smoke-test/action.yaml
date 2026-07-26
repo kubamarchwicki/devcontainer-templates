@@ -1,22 +1,19 @@
-name: 'Smoke test'
+name: "Smoke test"
 inputs:
   template:
-    description: 'Template to test'
+    description: "Template to test"
     required: true
 
 runs:
-  using: composite
+  using: "composite"
   steps:
-    - name: Checkout main
-      id: checkout_release
-      uses: actions/checkout@v3
+    - name: "Checkout repository"
+      uses: actions/checkout@v4
 
-    - name: Build template
-      id: build_template
+    - name: "Build template"
       shell: bash
       run: ${{ github.action_path }}/build.sh ${{ inputs.template }}
 
-    - name: Test template
-      id: test_template
+    - name: "Test template"
       shell: bash
-      run: ${{ github.action_path }}/test.sh  ${{ inputs.template }}
+      run: ${{ github.action_path }}/test.sh ${{ inputs.template }}
