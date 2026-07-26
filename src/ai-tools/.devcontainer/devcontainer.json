@@ -5,12 +5,10 @@
         "context": "."
     },
     "features": {
+        "ghcr.io/devcontainers/features/node:2": {},
         "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
         "ghcr.io/kubamarchwicki/devcontainer-features/codex:1": {}
     },
-    "overrideFeatureInstallOrder": [
-        "ghcr.io/kubamarchwicki/devcontainer-features/codex:1"
-    ],
     "initializeCommand": "mkdir -p \"${localEnv:HOME}/workspaces/engineering-skills\"",
     "remoteUser": "vscode",
     "updateRemoteUserUID": true,
