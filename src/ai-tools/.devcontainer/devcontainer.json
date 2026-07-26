@@ -1,0 +1,28 @@
+{
+    "name": "AI Development",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    "features": {
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+        "ghcr.io/kubamarchwicki/devcontainer-features/codex:1": {}
+    },
+    "initializeCommand": "mkdir -p \"${localEnv:HOME}/workspaces/engineering-skills\"",
+    "remoteUser": "vscode",
+    "updateRemoteUserUID": true,
+    "init": true,
+    "containerEnv": {
+        "DISABLE_AUTOUPDATER": "1"
+    },
+    "mounts": [
+        "source=${devcontainerId}-codex-home,target=/home/vscode/.codex,type=volume",
+        "source=${devcontainerId}-claude-home,target=/home/vscode/.claude,type=volume",
+        "source=${localEnv:HOME}/workspaces/engineering-skills,target=/opt/engineering-skills,type=bind,readonly"
+    ],
+    "onCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.codex /home/vscode/.claude",
+    "postCreateCommand": {
+        "link-skills": "if [ -x /opt/engineering-skills/scripts/link-skills.sh ]; then /opt/engineering-skills/scripts/link-skills.sh; else echo 'engineering-skills checkout not found; skipping skill links'; fi"
+    },
+    "waitFor": "postCreateCommand"
+}
