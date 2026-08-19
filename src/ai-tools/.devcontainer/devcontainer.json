@@ -5,6 +5,7 @@
         "context": "."
     },
     "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
         "ghcr.io/devcontainers/features/node:2": {},
         "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
         "ghcr.io/kubamarchwicki/devcontainer-features/codex:1": {}
@@ -17,6 +18,7 @@
         "DISABLE_AUTOUPDATER": "1"
     },
     "mounts": [
+        "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
         "source=${templateOption:projectName}-codex-home,target=/home/vscode/.codex,type=volume",
         "source=${templateOption:projectName}-claude-home,target=/home/vscode/.claude,type=volume",
         "source=${localEnv:HOME}/workspaces/engineering-skills,target=/opt/engineering-skills,type=bind,readonly"
