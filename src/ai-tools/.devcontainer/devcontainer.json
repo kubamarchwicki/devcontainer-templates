@@ -11,7 +11,7 @@
         "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
         "ghcr.io/kubamarchwicki/devcontainer-features/codex:1": {},
         "ghcr.io/kubamarchwicki/devcontainer-features/skills:1": {
-            "skills": "kubamarchwicki/engineering-skills,humanlayer/skills@show-me",
+            "sources": "kubamarchwicki/engineering-skills,humanlayer/skills@show-me",
             "agents": "codex,claude-code"
         }
     },
