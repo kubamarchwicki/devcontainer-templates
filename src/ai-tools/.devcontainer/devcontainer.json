@@ -15,7 +15,6 @@
             "agents": "codex,claude-code"
         }
     },
-    "initializeCommand": "mkdir -p \"${localEnv:HOME}/workspaces/engineering-skills\"",
     "remoteUser": "vscode",
     "updateRemoteUserUID": true,
     "init": true,
