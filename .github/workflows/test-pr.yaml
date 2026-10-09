@@ -4,6 +4,13 @@ on:
   workflow_dispatch:
 
 jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test release versioning"
+        run: python3 -B -m unittest discover -s test/release -v
+
   test:
     runs-on: ubuntu-latest
     steps:

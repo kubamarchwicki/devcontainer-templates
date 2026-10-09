@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'src/**'
   workflow_dispatch:
+
+concurrency:
+  group: release-templates
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -15,8 +21,25 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Prepare template versions"
+        id: versions
+        shell: bash
+        run: |
+          # checkout can reset origin/main to the triggering commit on a rerun.
+          git fetch origin +refs/heads/main:refs/remotes/origin/main
+          # Only newer source changes supersede a pending release.
+          if [[ "$(git rev-list -1 --first-parent HEAD -- src)" != "$(git rev-list -1 --first-parent origin/main -- src)" ]]; then
+            echo "Skipping an outdated commit; main has newer template changes."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 .github/scripts/prepare-release.py
 
       - name: "Publish Templates"
+        if: steps.versions.outputs.publish == 'true'
         uses: devcontainers/action@v1
         with:
           publish-templates: "true"
